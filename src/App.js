@@ -51,7 +51,7 @@ function App() {
 
   return (
     <div className='App'>
-      <Header />
+      <Header title="Todo List"/>
 
       <AddItem 
        newItem = {newItem}
