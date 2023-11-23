@@ -1,7 +1,7 @@
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddItem from './AddItem';
 import SearchItem from './SearchItem';
 
@@ -10,13 +10,28 @@ import SearchItem from './SearchItem';
 
 
 function App() {
-
-  const [items, setItems] = useState(JSON.parse(localStorage.getItem("list_todo"))
-   );
+  const API_URL = 'http://localhost:3000/items';
+   const [items, setItems] = useState( [] );
 
     const [newItem, setNewItem] = useState('');
 
     const [search, setSearch] = useState('');
+
+    useEffect(() => {
+      const fetchitems = async () => {
+        try {
+          const response = await fetch(API_URL);
+          console.log(response)
+          const listItems = await response.json();
+          console.log(listItems)
+          setItems(listItems);
+        } catch (err){
+          console.log(err.stack)
+        }
+      }
+
+      (async () => await fetchitems())()
+    }, [])
 
     const addItem = (item)  => {
       const id = items.length ? items[items.length - 1].id + 1 : 1 ;
@@ -46,7 +61,6 @@ function App() {
       console.log(newItem)
       addItem(newItem)
       setNewItem('')
-
     }
 
   return (
